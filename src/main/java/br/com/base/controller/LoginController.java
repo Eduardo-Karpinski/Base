@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.base.records.LoginRecordInput;
-import br.com.base.records.UserRecordInput;
 import br.com.base.services.LoginService;
 import jakarta.validation.Valid;
 
@@ -24,11 +23,6 @@ public class LoginController {
 	@PostMapping("/login")
 	public ResponseEntity<Object> login(@Valid @RequestBody LoginRecordInput record) {
 		return loginService.login(record);
-	}
-	
-	@PostMapping("/register")
-	public ResponseEntity<Object> register(@Valid @RequestBody UserRecordInput record) {
-		return loginService.register(record);
 	}
 	
 }

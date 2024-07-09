@@ -29,6 +29,20 @@ public class UserService {
 		this.passwordEncoder = passwordEncoder;
 	}
 
+	public ResponseEntity<Object> save(UserRecordInput record) {
+		if (userRepository.existsByEmail(record.email())) {
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already used");
+		}
+		User user = User.builder()
+				.name(record.name())
+				.email(record.email())
+				.password(passwordEncoder.encode(record.password()))
+				.build();
+		userRepository.save(user);
+		log.info("Usuario criado com sucesso");
+		return ResponseEntity.status(HttpStatus.OK).build();
+	}
+	
 	public ResponseEntity<Object> getById(Long id) {
 		
 		Optional<User> optional = userRepository.findById(id);
