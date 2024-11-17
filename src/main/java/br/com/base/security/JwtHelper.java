@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+import br.com.base.domain.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -26,12 +27,13 @@ public class JwtHelper {
         this.MINUTES = jwtExpiration;
     }
 	
-	public String generateToken(String email) {
+	public String generateToken(User user) {
 		var now = Instant.now();
 		return Jwts.builder()
-				.subject(email)
+				.subject(user.getEmail())
 				.issuedAt(Date.from(now))
 				.expiration(Date.from(now.plus(MINUTES, ChronoUnit.MINUTES)))
+				.claim("roles", user.getRoles())
 				.signWith(SECRET_KEY)
 				.compact();
 	}

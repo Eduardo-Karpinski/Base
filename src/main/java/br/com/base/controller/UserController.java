@@ -3,6 +3,7 @@ package br.com.base.controller;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.base.records.UserRecordInput;
 import br.com.base.records.UserRecordOutput;
+import br.com.base.security.Roles;
 import br.com.base.services.UserService;
 import jakarta.validation.Valid;
 
 @RestController()
+@Secured(Roles.ADMIN)
 @RequestMapping("/api/v1/user")
 public class UserController {
 	

@@ -6,7 +6,6 @@ import br.com.base.records.UserRecordOutput;
 
 public class UserMapper {
 	
-
 	private UserMapper() {
 	
 	}

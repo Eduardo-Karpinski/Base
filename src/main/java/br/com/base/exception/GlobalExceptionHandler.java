@@ -13,6 +13,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
@@ -20,6 +21,16 @@ import jakarta.validation.ConstraintViolationException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
+	@ExceptionHandler(NoResourceFoundException.class)
+	public ResponseEntity<Object> handleAccessDenied(NoResourceFoundException ex, HttpServletRequest request) {
+		ExceptionBody body = ExceptionBody.builder()
+				.status(HttpStatus.BAD_REQUEST.value())
+				.error(HttpStatus.BAD_REQUEST.name())
+				.message(ex.getMessage())
+				.path(request.getRequestURI())
+				.build();
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+	}
 	
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<Object> handleAccessDenied(ConstraintViolationException ex, HttpServletRequest request) {
@@ -74,8 +85,8 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpServletRequest request) {
 		List<String> errors = ex.getBindingResult().getAllErrors().stream().map(error -> {
-			if (error instanceof FieldError) {
-				return ((FieldError) error).getField() + ": " + error.getDefaultMessage();
+			if (error instanceof FieldError fieldError) {
+				return fieldError.getField() + ": " + error.getDefaultMessage();
 			} else {
 				return error.getObjectName() + ": " + error.getDefaultMessage();
 			}

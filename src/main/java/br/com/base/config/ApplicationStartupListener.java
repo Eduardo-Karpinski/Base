@@ -1,5 +1,7 @@
 package br.com.base.config;
 
+import java.util.Set;
+
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.base.domain.User;
 import br.com.base.repositories.UserRepository;
+import br.com.base.security.Roles;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -30,6 +33,7 @@ public class ApplicationStartupListener {
 					.name("Base")
 					.email("base@base.com")
 					.password(passwordEncoder.encode("base1234"))
+					.roles(Set.of(Roles.ADMIN))
 					.build();
 			
 			userRepository.save(user);

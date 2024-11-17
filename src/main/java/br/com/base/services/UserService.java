@@ -44,7 +44,6 @@ public class UserService {
 	}
 	
 	public ResponseEntity<Object> getById(Long id) {
-		
 		Optional<User> optional = userRepository.findById(id);
 
 		if (optional.isPresent()) {

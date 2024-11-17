@@ -1,9 +1,12 @@
 package br.com.base.domain;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -30,4 +33,6 @@ public class User {
 	@Builder.Default
 	@Column(nullable = false)
 	private LocalDateTime creationDate = LocalDateTime.now();
+	@ElementCollection(fetch = FetchType.EAGER)
+    private Set<String> roles;
 }
