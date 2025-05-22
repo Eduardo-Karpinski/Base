@@ -12,31 +12,28 @@ import org.springframework.stereotype.Service;
 
 import br.com.base.domain.User;
 import br.com.base.mappers.UserMapper;
-import br.com.base.records.UserRecordInput;
-import br.com.base.records.UserRecordOutput;
+import br.com.base.records.UserRequest;
+import br.com.base.records.UserResponse;
 import br.com.base.repositories.UserRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 
-	public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-		this.userRepository = userRepository;
-		this.passwordEncoder = passwordEncoder;
-	}
-
-	public ResponseEntity<Object> save(UserRecordInput record) {
-		if (userRepository.existsByEmail(record.email())) {
+	public ResponseEntity<Object> save(UserRequest userRequest) {
+		if (userRepository.existsByEmail(userRequest.email())) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already used");
 		}
 		User user = User.builder()
-				.name(record.name())
-				.email(record.email())
-				.password(passwordEncoder.encode(record.password()))
+				.name(userRequest.name())
+				.email(userRequest.email())
+				.password(passwordEncoder.encode(userRequest.password()))
 				.build();
 		userRepository.save(user);
 		log.info("Usuario criado com sucesso");
@@ -47,7 +44,7 @@ public class UserService {
 		Optional<User> optional = userRepository.findById(id);
 
 		if (optional.isPresent()) {
-			return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toRecord(optional.get()));
+			return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toUserResponse(optional.get()));
 		} else {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 		}
@@ -65,14 +62,14 @@ public class UserService {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 	}
 
-	public ResponseEntity<Object> update(Long id, UserRecordInput record) {
+	public ResponseEntity<Object> update(Long id, UserRequest userRequest) {
 		Optional<User> optional = userRepository.findById(id);
 
 		if (optional.isPresent()) {
 			User user = optional.get();
-			user.setName(record.name());
-			user.setEmail(record.email());
-			user.setPassword(passwordEncoder.encode(record.password()));
+			user.setName(userRequest.name());
+			user.setEmail(userRequest.email());
+			user.setPassword(passwordEncoder.encode(userRequest.password()));
 			
 			userRepository.save(user);
 
@@ -83,10 +80,10 @@ public class UserService {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 	}
 
-	public PagedModel<UserRecordOutput> get(Pageable pageable) {
+	public ResponseEntity<Object> get(Pageable pageable) {
 		Page<User> pageOfEntities = userRepository.findAll(pageable);
-		Page<UserRecordOutput> pageOfRecords = pageOfEntities.map(user -> UserMapper.toRecord(user));
-		return new PagedModel<>(pageOfRecords); 
+		Page<UserResponse> pageOfRecords = pageOfEntities.map(user -> UserMapper.toUserResponse(user));
+		return ResponseEntity.status(HttpStatus.OK).body(new PagedModel<>(pageOfRecords));
 	}
 
 }

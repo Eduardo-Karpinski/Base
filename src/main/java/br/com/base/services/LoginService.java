@@ -1,5 +1,7 @@
 package br.com.base.services;
 
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -9,26 +11,43 @@ import org.springframework.stereotype.Service;
 
 import br.com.base.domain.User;
 import br.com.base.mappers.UserMapper;
-import br.com.base.records.LoginRecordInput;
+import br.com.base.records.LoginRequest;
+import br.com.base.repositories.UserRepository;
 import br.com.base.security.CustomUserDetails;
 import br.com.base.security.JwtHelper;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class LoginService {
 
-	private final AuthenticationManager authenticationManager;
 	private final JwtHelper jwtHelper;
+	private final AuthenticationManager authenticationManager;
+	private final UserRepository userRepository;
 
-	public LoginService(AuthenticationManager authenticationManager, JwtHelper jwtHelper) {
-		this.authenticationManager = authenticationManager;
-		this.jwtHelper = jwtHelper;
-	}
-
-	public ResponseEntity<Object> login(LoginRecordInput record) {
-		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(record.email(), record.password()));
-	    User user = ((CustomUserDetails) authentication.getPrincipal()).getUser();
+	public ResponseEntity<Object> login(LoginRequest loginRequest) {
+		Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.email(), loginRequest.password()));
+		User user = ((CustomUserDetails) authentication.getPrincipal()).getUser();
 		String token = jwtHelper.generateToken(user);
-		return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toLoginOutput(user, token));
+		return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toLoginResponse(user, token));
 	}
-	
+
+	public ResponseEntity<Object> validate(String token) {
+		boolean isTokenExpired = jwtHelper.isTokenExpired(token);
+
+		if (isTokenExpired) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Expired token");
+		}
+
+		String username = jwtHelper.extractUsername(token);
+
+		Optional<User> optional = userRepository.findByEmail(username);
+
+		if (optional.isEmpty()) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+		}
+
+		return ResponseEntity.status(HttpStatus.OK).body(UserMapper.toLoginResponse(optional.get(), token));
+	}
+
 }

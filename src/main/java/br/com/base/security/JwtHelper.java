@@ -19,8 +19,8 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtHelper {
 	
-	private final SecretKey SECRET_KEY;
     private final Integer MINUTES;
+    private final SecretKey SECRET_KEY;
 
     public JwtHelper(@Value("${jwt.secret}") String secret, @Value("${jwt.expiration}") Integer jwtExpiration) {
     	this.SECRET_KEY = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
@@ -38,20 +38,20 @@ public class JwtHelper {
 				.compact();
 	}
 
-	public String extractUsername(String token) throws Exception {
+	public String extractUsername(String token) {
 		return getTokenBody(token).getSubject();
 	}
 
-	public Boolean validateToken(String token, UserDetails userDetails) throws Exception {
+	public Boolean validateToken(String token, UserDetails userDetails) {
 		final String username = extractUsername(token);
 		return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
 	}
 
-	private Claims getTokenBody(String token) throws Exception {
+	public Claims getTokenBody(String token) {
 		return Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).getPayload();
 	}
 
-	private boolean isTokenExpired(String token) throws Exception {
+	public boolean isTokenExpired(String token) {
 		Claims claims = getTokenBody(token);
 		return claims.getExpiration().before(new Date());
 	}

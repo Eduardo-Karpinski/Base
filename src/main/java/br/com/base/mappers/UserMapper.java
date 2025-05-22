@@ -1,8 +1,8 @@
 package br.com.base.mappers;
 
 import br.com.base.domain.User;
-import br.com.base.records.LoginRecordOutput;
-import br.com.base.records.UserRecordOutput;
+import br.com.base.records.LoginResponse;
+import br.com.base.records.UserResponse;
 
 public class UserMapper {
 	
@@ -10,12 +10,12 @@ public class UserMapper {
 	
 	}
 	
-	public static UserRecordOutput toRecord(User user) {
-		return new UserRecordOutput(user.getId(), user.getName(), user.getCreationDate());
+	public static UserResponse toUserResponse(User user) {
+		return new UserResponse(user.getId(), user.getName(), user.getCreationDate());
 	}
 	
-	public static LoginRecordOutput toLoginOutput(User user, String sessionToken) {
-		return new LoginRecordOutput(user.getId(), user.getName(), user.getCreationDate(), sessionToken);
+	public static LoginResponse toLoginResponse(User user, String token) {
+		return new LoginResponse(user.getId(), user.getName(), user.getEmail(), user.getCreationDate(), user.getRoles(), token);
 	}
 	
 }
