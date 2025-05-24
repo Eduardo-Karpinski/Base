@@ -14,6 +14,7 @@ import br.com.base.domain.User;
 import br.com.base.mappers.UserMapper;
 import br.com.base.records.UserRequest;
 import br.com.base.records.UserResponse;
+import br.com.base.records.UserUpdateRequest;
 import br.com.base.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -63,15 +64,14 @@ public class UserService {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 	}
 
-	public ResponseEntity<Object> update(Long id, UserRequest userRequest) {
+	public ResponseEntity<Object> update(Long id, UserUpdateRequest userUpdateRequest) {
 		Optional<User> optional = userRepository.findById(id);
 
 		if (optional.isPresent()) {
 			User user = optional.get();
-			user.setName(userRequest.name());
-			user.setEmail(userRequest.email());
-			user.setRoles(userRequest.roles());
-//			user.setPassword(passwordEncoder.encode(userRequest.password()));
+			user.setName(userUpdateRequest.name());
+			user.setEmail(userUpdateRequest.email());
+			user.setRoles(userUpdateRequest.roles());
 			
 			userRepository.save(user);
 

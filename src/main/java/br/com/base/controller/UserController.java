@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.base.records.UserRequest;
+import br.com.base.records.UserUpdateRequest;
 import br.com.base.security.Roles;
 import br.com.base.services.UserService;
 import jakarta.validation.Valid;
@@ -42,8 +43,8 @@ public class UserController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody @Valid UserRequest userRequest) {
-		return userService.update(id, userRequest);
+	public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody @Valid UserUpdateRequest userUpdateRequest) {
+		return userService.update(id, userUpdateRequest);
 	}
 	
 	@GetMapping
