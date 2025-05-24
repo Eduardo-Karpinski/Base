@@ -11,7 +11,7 @@ public class UserMapper {
 	}
 	
 	public static UserResponse toUserResponse(User user) {
-		return new UserResponse(user.getId(), user.getName(), user.getCreationDate());
+		return new UserResponse(user.getId(), user.getName(), user.getEmail(), user.getRoles(), user.getCreationDate());
 	}
 	
 	public static LoginResponse toLoginResponse(User user, String token) {

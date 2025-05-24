@@ -33,6 +33,7 @@ public class UserService {
 		User user = User.builder()
 				.name(userRequest.name())
 				.email(userRequest.email())
+				.roles(userRequest.roles())
 				.password(passwordEncoder.encode(userRequest.password()))
 				.build();
 		userRepository.save(user);
@@ -69,7 +70,8 @@ public class UserService {
 			User user = optional.get();
 			user.setName(userRequest.name());
 			user.setEmail(userRequest.email());
-			user.setPassword(passwordEncoder.encode(userRequest.password()));
+			user.setRoles(userRequest.roles());
+//			user.setPassword(passwordEncoder.encode(userRequest.password()));
 			
 			userRepository.save(user);
 

@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -22,7 +21,7 @@ import lombok.RequiredArgsConstructor;
 @RestController()
 @Secured(Roles.ADMIN)
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/users")
 public class UserController {
 	
 	private final UserService userService;
@@ -43,7 +42,7 @@ public class UserController {
 	}
 
 	@PutMapping("{id}")
-	public ResponseEntity<Object> update(@PathVariable Long id, @ModelAttribute @Valid UserRequest userRequest) {
+	public ResponseEntity<Object> update(@PathVariable Long id, @RequestBody @Valid UserRequest userRequest) {
 		return userService.update(id, userRequest);
 	}
 	
