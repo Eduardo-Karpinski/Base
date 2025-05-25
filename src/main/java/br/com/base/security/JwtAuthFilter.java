@@ -8,10 +8,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.base.exception.ExceptionBody;
+import br.com.base.utils.CookieUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,14 +29,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 		try {
-			String authHeader = request.getHeader("Authorization");
-			String token = null;
-			String username = null;
 			
-			if (authHeader != null && authHeader.startsWith("Bearer ")) {
-				token = authHeader.substring(7);
-				username = jwtHelper.extractUsername(token);
-			}
+			String token = CookieUtils.getCookieValue(request, "jwt");
+            String username = (token != null && !token.isBlank()) ? jwtHelper.extractUsername(token) : null;
 
 			if (token == null) {
 				if (request.getRequestURI().startsWith("/api/v1/auth")) {
@@ -44,7 +39,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 					return;
 				}
 				
-				returnError(request, response, "Token is null");
+				sendAuthError(response, request, "Token is null");
 				return;
 			}
 
@@ -57,27 +52,27 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 					filterChain.doFilter(request, response);
 					return;
 				}
-				returnError(request, response, "Invalid token");
+				sendAuthError(response, request, "Invalid token");
 				return;
 			}
 
 			filterChain.doFilter(request, response);
 		} catch (Exception e) {
-			returnError(request, response, e.getMessage());
+			sendAuthError(response, request, e.getMessage());
 		}
 	}
+	
+	private void sendAuthError(HttpServletResponse response, HttpServletRequest request, String message) throws IOException {
+        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setContentType("application/json");
 
-	private void returnError(HttpServletRequest request, HttpServletResponse response, String message) throws IOException, JsonProcessingException {
-		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-		response.setContentType("application/json");
+        ExceptionBody errorBody = ExceptionBody.builder()
+                .status(HttpStatus.FORBIDDEN.value())
+                .error(HttpStatus.FORBIDDEN.name())
+                .message(message)
+                .path(request.getRequestURI())
+                .build();
 
-		ExceptionBody body = ExceptionBody.builder()
-				.status(HttpStatus.FORBIDDEN.value())
-				.error(HttpStatus.FORBIDDEN.name())
-				.message(message)
-				.path(request.getRequestURI())
-				.build();
-
-		response.getWriter().write(objectMapper.writeValueAsString(body));
-	}
+        response.getWriter().write(objectMapper.writeValueAsString(errorBody));
+    }
 }

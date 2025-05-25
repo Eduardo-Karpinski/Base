@@ -56,4 +56,8 @@ public class JwtHelper {
 		return claims.getExpiration().before(new Date());
 	}
 	
+	public int getExpirationInSeconds() {
+	    return MINUTES * 60;
+	}
+	
 }
