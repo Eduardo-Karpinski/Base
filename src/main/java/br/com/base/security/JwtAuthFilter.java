@@ -16,19 +16,15 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
 
 	private final UserDetailsServiceImpl userDetailsService;
 	private final ObjectMapper objectMapper;
 	private final JwtHelper jwtHelper;
-
-	public JwtAuthFilter(UserDetailsServiceImpl userDetailsService, ObjectMapper objectMapper, JwtHelper jwtHelper) {
-		this.userDetailsService = userDetailsService;
-		this.objectMapper = objectMapper;
-		this.jwtHelper = jwtHelper;
-	}
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
