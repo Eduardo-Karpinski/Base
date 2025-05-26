@@ -9,10 +9,8 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import br.com.base.exception.ExceptionBody;
 import br.com.base.utils.CookieUtils;
+import br.com.base.utils.ErrorResponseWriter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
 	private final JwtHelper jwtHelper;
-	private final ObjectMapper objectMapper;
+	private final ErrorResponseWriter errorResponseWriter;
 	private final UserDetailsServiceImpl userDetailsService;
 
 	@Override
@@ -71,16 +69,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	}
 
 	private void sendAuthError(HttpServletResponse response, HttpServletRequest request, String message) throws IOException {
-		response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-		response.setContentType("application/json");
-
-		ExceptionBody errorBody = ExceptionBody.builder()
-				.status(HttpStatus.FORBIDDEN.value())
-				.error(HttpStatus.FORBIDDEN.name())
-				.message(message)
-				.path(request.getRequestURI())
-				.build();
-
-		response.getWriter().write(objectMapper.writeValueAsString(errorBody));
+		errorResponseWriter.write(response, HttpStatus.FORBIDDEN, message, request.getRequestURI());
 	}
 }
