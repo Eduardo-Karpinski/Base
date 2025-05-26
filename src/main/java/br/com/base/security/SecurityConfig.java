@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,18 +25,18 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import br.com.base.utils.ErrorResponseWriter;
+import lombok.RequiredArgsConstructor;
+
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 @EnableMethodSecurity(securedEnabled = true)
 public class SecurityConfig {
 
-	private final UserDetailsServiceImpl userDetailsService;
 	private final JwtAuthFilter jwtAuthFilter;
-	
-	public SecurityConfig(UserDetailsServiceImpl userDetailsService, JwtAuthFilter jwtAuthFilter) {
-		this.userDetailsService = userDetailsService;
-		this.jwtAuthFilter = jwtAuthFilter;
-	}
+	private final ErrorResponseWriter errorResponseWriter;
+	private final UserDetailsServiceImpl userDetailsService;
 	
 	@Bean
 	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
@@ -55,8 +56,17 @@ public class SecurityConfig {
 				.cors(httpSecurityCorsConfigurer -> httpSecurityCorsConfigurer.configurationSource(corsConfigurationSource()))
 				.csrf(AbstractHttpConfigurer::disable)
 				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-				.authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll().anyRequest().authenticated())
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers(HttpMethod.POST, "/api/v1/auth/**").permitAll()
+				        .requestMatchers(HttpMethod.GET, "/api/v1/auth/**").permitAll()
+				        .anyRequest().authenticated())
 				.authenticationManager(authenticationManager)
+				.exceptionHandling(ex -> ex
+						.authenticationEntryPoint((request, response, authException) -> errorResponseWriter
+								.write(response, HttpStatus.UNAUTHORIZED, authException.getMessage(), request.getRequestURI()))
+						.accessDeniedHandler((request, response, accessDeniedException) -> errorResponseWriter.write(response,
+								HttpStatus.FORBIDDEN, accessDeniedException.getMessage(), request.getRequestURI()))
+				)
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 				.build();
 	}

@@ -39,7 +39,6 @@ public class LoginService {
 	}
 
 	public ResponseEntity<Object> validate(HttpServletRequest request) {
-		
 		Optional<Cookie> cookie = CookieUtils.getCookie(request, "jwt");
 
 		if (cookie.isEmpty()) {

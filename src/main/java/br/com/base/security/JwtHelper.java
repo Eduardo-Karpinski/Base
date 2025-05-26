@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import br.com.base.domain.User;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -48,12 +49,24 @@ public class JwtHelper {
 	}
 
 	public Claims getTokenBody(String token) {
-		return Jwts.parser().verifyWith(SECRET_KEY).build().parseSignedClaims(token).getPayload();
+		try {
+			return Jwts.parser()
+					.verifyWith(SECRET_KEY)
+					.build()
+					.parseSignedClaims(token)
+					.getPayload();
+		} catch (ExpiredJwtException e) {
+	        return e.getClaims();
+	    }
 	}
 
 	public boolean isTokenExpired(String token) {
-		Claims claims = getTokenBody(token);
-		return claims.getExpiration().before(new Date());
+		try {
+			Claims claims = getTokenBody(token);
+			return claims.getExpiration().before(new Date());
+		} catch (Exception e) {
+			return true;
+		}
 	}
 	
 	public int getExpirationInSeconds() {

@@ -16,17 +16,14 @@ import org.springframework.stereotype.Component;
 import br.com.base.domain.User;
 import br.com.base.repositories.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 
 @Component
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-	private final UserRepository userRepository;
 	private final HttpServletRequest request;
-
-	public UserDetailsServiceImpl(UserRepository userRepository, HttpServletRequest request) {
-		this.userRepository = userRepository;
-		this.request = request;
-	}
+	private final UserRepository userRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) {
