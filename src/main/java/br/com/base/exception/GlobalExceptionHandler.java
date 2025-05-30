@@ -23,62 +23,40 @@ public class GlobalExceptionHandler {
 	
 	@ExceptionHandler(NoResourceFoundException.class)
 	public ResponseEntity<Object> handleAccessDenied(NoResourceFoundException ex, HttpServletRequest request) {
-		ExceptionBody body = ExceptionBody.builder()
-				.status(HttpStatus.BAD_REQUEST.value())
-				.error(HttpStatus.BAD_REQUEST.name())
-				.message(ex.getMessage())
-				.path(request.getRequestURI())
-				.build();
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
-	}
-	
-	@ExceptionHandler(ConstraintViolationException.class)
-	public ResponseEntity<Object> handleAccessDenied(ConstraintViolationException ex, HttpServletRequest request) {
-		List<String> errors = ex.getConstraintViolations().stream().map(error -> {
-			return error.getInvalidValue() + ": " + error.getMessage();
-		}).collect(Collectors.toList());
-
-		ExceptionBody body = ExceptionBody.builder()
-				.status(HttpStatus.BAD_REQUEST.value())
-				.error(HttpStatus.BAD_REQUEST.name())
-				.message("Validation errors occurred")
-				.path(request.getRequestURI())
-				.errors(errors)
-				.build();
-
+		ExceptionBody body = new ExceptionBody(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), ex.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
 	}
 	
 	@ExceptionHandler(BadCredentialsException.class)
 	public ResponseEntity<Object> handleAccessDenied(BadCredentialsException ex, HttpServletRequest request) {
-		ExceptionBody body = ExceptionBody.builder()
-				.status(HttpStatus.BAD_REQUEST.value())
-				.error(HttpStatus.BAD_REQUEST.name())
-				.message(ex.getMessage())
-				.path(request.getRequestURI())
-				.build();
+		ExceptionBody body = new ExceptionBody(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), ex.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
 	}
 	
 	@ExceptionHandler(AccessDeniedException.class)
 	public ResponseEntity<Object> handleAccessDenied(AccessDeniedException ex, HttpServletRequest request) {
-		ExceptionBody body = ExceptionBody.builder()
-				.status(HttpStatus.FORBIDDEN.value())
-				.error(HttpStatus.FORBIDDEN.name())
-				.message(ex.getMessage())
-				.path(request.getRequestURI())
-				.build();
+		ExceptionBody body = new ExceptionBody(HttpStatus.FORBIDDEN.value(), HttpStatus.FORBIDDEN.name(), ex.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(body);
 	}
 	
 	@ExceptionHandler(InternalAuthenticationServiceException.class)
 	public ResponseEntity<Object> handleInternalAuthenticationService(InternalAuthenticationServiceException ex, HttpServletRequest request) {
-		ExceptionBody body = ExceptionBody.builder()
-				.status(HttpStatus.BAD_REQUEST.value())
-				.error(HttpStatus.BAD_REQUEST.name())
-				.message(ex.getMessage())
-				.path(request.getRequestURI())
-				.build();
+		ExceptionBody body = new ExceptionBody(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), ex.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+	}
+	
+	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+	public ResponseEntity<Object> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
+		ExceptionBody body = new ExceptionBody(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), ex.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+	}
+
+	@ExceptionHandler(ConstraintViolationException.class)
+	public ResponseEntity<Object> handleAccessDenied(ConstraintViolationException ex, HttpServletRequest request) {
+		List<String> errors = ex.getConstraintViolations().stream().map(error -> {
+			return error.getInvalidValue() + ": " + error.getMessage();
+		}).collect(Collectors.toList());
+		ExceptionBody body = new ExceptionBody(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), "Validation errors occurred", request.getRequestURI(), errors);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
 	}
 	
@@ -92,40 +70,14 @@ public class GlobalExceptionHandler {
 			}
 		}).collect(Collectors.toList());
 
-		ExceptionBody body = ExceptionBody.builder()
-				.status(HttpStatus.BAD_REQUEST.value())
-				.error(HttpStatus.BAD_REQUEST.name())
-				.message("Validation errors occurred")
-				.path(request.getRequestURI())
-				.errors(errors)
-				.build();
-
+		ExceptionBody body = new ExceptionBody(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), "Validation errors occurred", request.getRequestURI(), errors);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
 	}
 	
-	@ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-	public ResponseEntity<Object> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex, HttpServletRequest request) {
-		ExceptionBody body = ExceptionBody.builder()
-				.status(HttpStatus.BAD_REQUEST.value())
-				.error(HttpStatus.BAD_REQUEST.name())
-				.message(ex.getMessage())
-				.path(request.getRequestURI())
-				.build();
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
-	}
-
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleAllExceptions(Exception ex, HttpServletRequest request) {
-		
 		ex.printStackTrace();
-		
-		ExceptionBody body = ExceptionBody.builder()
-				.status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-				.error(HttpStatus.INTERNAL_SERVER_ERROR.name())
-				.message(ex.getMessage())
-				.path(request.getRequestURI())
-				.build();
-
+		ExceptionBody body = new ExceptionBody(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.name(), ex.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
 	}
 

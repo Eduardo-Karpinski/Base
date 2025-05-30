@@ -18,13 +18,7 @@ public class ErrorResponseWriter {
     private final ObjectMapper objectMapper;
 
     public void write(HttpServletResponse response, HttpStatus status, String message, String path) throws IOException {
-        ExceptionBody body = ExceptionBody.builder()
-                .status(status.value())
-                .error(status.name())
-                .message(message)
-                .path(path)
-                .build();
-
+        ExceptionBody body = new ExceptionBody(status.value(), status.name(), message, path);
         response.setStatus(status.value());
         response.setContentType("application/json");
         response.getWriter().write(objectMapper.writeValueAsString(body));

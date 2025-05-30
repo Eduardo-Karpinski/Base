@@ -5,20 +5,19 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import lombok.Builder;
-import lombok.Data;
+public record ExceptionBody(
+    LocalDateTime timestamp,
+    Integer status,
+    String error,
+    String message,
+    String path,
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    List<String> errors) {
+    public ExceptionBody(Integer status, String error, String message, String path, List<String> errors) {
+        this(LocalDateTime.now(), status, error, message, path, errors);
+    }
 
-@Data
-@Builder
-public class ExceptionBody {
-
-	@Builder.Default
-	private LocalDateTime timestamp = LocalDateTime.now();
-	private Integer status;
-	private String error;
-	private String message;
-	private String path;
-	@JsonInclude(JsonInclude.Include.NON_NULL)
-	private List<String> errors;
-
+    public ExceptionBody(Integer status, String error, String message, String path) {
+        this(LocalDateTime.now(), status, error, message, path, null);
+    }
 }
