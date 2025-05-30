@@ -1,0 +1,5 @@
+setx DB_URL "jdbc:mysql://localhost:3306/base?createDatabaseIfNotExist=true"
+setx DB_USER "root"
+setx DB_PASS "root"
+setx JWT_SECRET "7a6eVVq8GO75jwO5Xbi1zi5EoeunFsOnG7yqkg3e4Zk="
+setx JWT_EXPIRATION "60"
