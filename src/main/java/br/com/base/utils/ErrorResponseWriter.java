@@ -23,4 +23,5 @@ public class ErrorResponseWriter {
         response.setContentType("application/json");
         response.getWriter().write(objectMapper.writeValueAsString(body));
     }
+
 }
