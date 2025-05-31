@@ -17,9 +17,7 @@ import br.com.base.records.UserResponse;
 import br.com.base.records.UserUpdateRequest;
 import br.com.base.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -38,7 +36,6 @@ public class UserService {
 				.password(passwordEncoder.encode(userRequest.password()))
 				.build();
 		userRepository.save(user);
-		log.info("Usuario criado com sucesso");
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
@@ -57,7 +54,6 @@ public class UserService {
 
 		if (optional.isPresent()) {
 			userRepository.deleteById(id);
-			log.info("Usuario deletado com sucesso");
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 		}
 
@@ -75,7 +71,6 @@ public class UserService {
 			
 			userRepository.save(user);
 
-			log.info("Usuario atualizado com sucesso");
 			return ResponseEntity.status(HttpStatus.OK).build();
 		}
 

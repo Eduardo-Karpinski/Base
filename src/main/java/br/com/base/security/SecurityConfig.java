@@ -3,6 +3,7 @@ package br.com.base.security;
 import java.util.List;
 
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Role;
@@ -35,6 +36,7 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 
 	private final JwtAuthFilter jwtAuthFilter;
+	private final RateLimitFilter rateLimitFilter;
 	private final ErrorResponseWriter errorResponseWriter;
 	private final UserDetailsServiceImpl userDetailsService;
 	
@@ -91,4 +93,13 @@ public class SecurityConfig {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+	
+	@Bean
+    public FilterRegistrationBean<RateLimitFilter> rateLimiterFilter() {
+        FilterRegistrationBean<RateLimitFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(rateLimitFilter);
+        registrationBean.addUrlPatterns("/*");
+        return registrationBean;
+    }
+	
 }

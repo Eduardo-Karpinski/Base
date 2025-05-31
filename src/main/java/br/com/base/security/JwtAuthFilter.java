@@ -2,6 +2,7 @@ package br.com.base.security;
 
 import java.io.IOException;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
+@Order(1)
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -29,7 +31,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		try {
 			String token = CookieUtils.getCookieValue(request, "jwt");
-			boolean isAuthEndpoint = request.getRequestURI().startsWith("/api/v1/auth");
+			boolean isAuthEndpoint = request.getRequestURI().equals("/api/v1/auth/login");
 			
 			if (isAuthEndpoint) {
 				filterChain.doFilter(request, response);
