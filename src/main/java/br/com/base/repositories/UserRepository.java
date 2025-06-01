@@ -8,7 +8,7 @@ import br.com.base.domain.User;
 
 public interface UserRepository extends JpaRepository<User, Long> {
 
-	public Boolean existsByEmail(String email);
-	public Optional<User> findByEmail(String email);
+	Boolean existsByEmail(String email);
+	Optional<User> findByEmail(String email);
 	
 }

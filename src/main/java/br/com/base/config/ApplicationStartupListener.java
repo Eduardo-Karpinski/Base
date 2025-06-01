@@ -2,6 +2,7 @@ package br.com.base.config;
 
 import java.util.Set;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,15 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
+@RequiredArgsConstructor
 public class ApplicationStartupListener {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-
-	public ApplicationStartupListener(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-		this.userRepository = userRepository;
-		this.passwordEncoder = passwordEncoder;
-	}
 
 	@EventListener
 	public void onApplicationEvent(ContextRefreshedEvent event) {

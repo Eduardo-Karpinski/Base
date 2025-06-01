@@ -75,9 +75,5 @@ public class JwtHelper {
 			return true;
 		}
 	}
-	
-	public int getExpirationInSeconds() {
-	    return MINUTES * 60;
-	}
-	
+
 }

@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@RestController()
+@RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 public class LoginController {

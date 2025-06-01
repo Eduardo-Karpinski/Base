@@ -79,7 +79,7 @@ public class UserService {
 
 	public ResponseEntity<Object> get(Pageable pageable) {
 		Page<User> pageOfEntities = userRepository.findAll(pageable);
-		Page<UserResponse> pageOfRecords = pageOfEntities.map(user -> UserMapper.toUserResponse(user));
+		Page<UserResponse> pageOfRecords = pageOfEntities.map(UserMapper::toUserResponse);
 		return ResponseEntity.status(HttpStatus.OK).body(new PagedModel<>(pageOfRecords));
 	}
 

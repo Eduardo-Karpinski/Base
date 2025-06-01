@@ -19,7 +19,7 @@ import br.com.base.services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@RestController()
+@RestController
 @Secured(Roles.ADMIN)
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
