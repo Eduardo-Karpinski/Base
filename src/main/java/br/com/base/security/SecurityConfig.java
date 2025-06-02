@@ -2,11 +2,9 @@ package br.com.base.security;
 
 import java.util.List;
 
-import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
@@ -41,7 +39,6 @@ public class SecurityConfig {
 	private final UserDetailsServiceImpl userDetailsService;
 	
 	@Bean
-	@Role(BeanDefinition.ROLE_INFRASTRUCTURE)
 	public static RoleHierarchy roleHierarchy() {
 		String hierarchy = "ROLE_ADMIN > ROLE_USER";
         return RoleHierarchyImpl.fromHierarchy(hierarchy);
@@ -66,9 +63,8 @@ public class SecurityConfig {
 				.exceptionHandling(ex -> ex
 						.authenticationEntryPoint((request, response, authException) -> errorResponseWriter
 								.write(response, HttpStatus.UNAUTHORIZED, authException.getMessage(), request.getRequestURI()))
-						.accessDeniedHandler((request, response, accessDeniedException) -> errorResponseWriter.write(response,
-								HttpStatus.FORBIDDEN, accessDeniedException.getMessage(), request.getRequestURI()))
-				)
+						.accessDeniedHandler((request, response, accessDeniedException) -> errorResponseWriter
+								.write(response, HttpStatus.FORBIDDEN, accessDeniedException.getMessage(), request.getRequestURI())))
 				.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 				.build();
 	}
