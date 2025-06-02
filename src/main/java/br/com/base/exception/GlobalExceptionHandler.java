@@ -74,6 +74,13 @@ public class GlobalExceptionHandler {
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
 	}
 	
+	@ExceptionHandler(RuntimeException.class)
+	public ResponseEntity<Object> handleAccessDenied(RuntimeException ex, HttpServletRequest request) {
+		ex.printStackTrace();
+		ExceptionBody body = new ExceptionBody(HttpStatus.INTERNAL_SERVER_ERROR.value(), HttpStatus.INTERNAL_SERVER_ERROR.name(), ex.getMessage(), request.getRequestURI());
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(body);
+	}
+	
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleAllExceptions(Exception ex, HttpServletRequest request) {
 		ex.printStackTrace();

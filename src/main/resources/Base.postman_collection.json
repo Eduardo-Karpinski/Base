@@ -84,6 +84,38 @@
 			"response": []
 		},
 		{
+			"name": "save users",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Eduardo\",\r\n    \"email\": \"\",\r\n    \"roles\": [\"ROLE_ADMIN\"],\r\n    \"password\": \"senha123456789\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/api/v1/users",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "validate",
 			"request": {
 				"auth": {

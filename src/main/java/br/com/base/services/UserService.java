@@ -1,5 +1,6 @@
 package br.com.base.services;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
+	private final EmailService emailService;
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 
@@ -36,6 +38,7 @@ public class UserService {
 				.password(passwordEncoder.encode(userRequest.password()))
 				.build();
 		userRepository.save(user);
+		emailService.sendEmail(userRequest.email(), "Welcome to the base", Map.of("name", userRequest.name(), "password", userRequest.password()));
 		return ResponseEntity.status(HttpStatus.OK).build();
 	}
 	
