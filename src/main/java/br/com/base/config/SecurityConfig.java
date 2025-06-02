@@ -1,4 +1,4 @@
-package br.com.base.security;
+package br.com.base.config;
 
 import java.util.List;
 
@@ -24,6 +24,9 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import br.com.base.filter.JwtAuthFilter;
+import br.com.base.filter.RateLimitFilter;
+import br.com.base.security.UserDetailsServiceImpl;
 import br.com.base.utils.ErrorResponseWriter;
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package br.com.base.security;
+package br.com.base.filter;
 
 import java.io.IOException;
 import java.time.Duration;

@@ -1,4 +1,4 @@
-package br.com.base.security;
+package br.com.base.filter;
 
 import java.io.IOException;
 
@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import br.com.base.security.JwtHelper;
+import br.com.base.security.UserDetailsServiceImpl;
 import br.com.base.utils.CookieUtils;
 import br.com.base.utils.ErrorResponseWriter;
 import jakarta.servlet.FilterChain;
