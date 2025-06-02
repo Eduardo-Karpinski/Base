@@ -36,11 +36,11 @@ public class EmailService {
 	        helper.setSubject(subject);
 	        helper.setText(body, true);
 
+	        log.info("Sending email to {}, on thread: {}", to, Thread.currentThread().getName());
 	        mailSender.send(message);
 	        log.info("Email successfully sent to {}", to);
-	    } catch (Exception ex) {
-	        log.error("Failed to send email to {}: {}", to, ex.getMessage(), ex);
-	        throw new RuntimeException("Failed to send email", ex);
+	    } catch (Throwable t) {
+	        log.error("Failed to send email to {}: {}", to, t.getMessage());
 	    }
 	}
 
