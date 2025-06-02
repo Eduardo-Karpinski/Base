@@ -53,9 +53,9 @@ public class GlobalExceptionHandler {
 
 	@ExceptionHandler(ConstraintViolationException.class)
 	public ResponseEntity<Object> handleAccessDenied(ConstraintViolationException ex, HttpServletRequest request) {
-		List<String> errors = ex.getConstraintViolations().stream().map(error -> {
-			return error.getInvalidValue() + ": " + error.getMessage();
-		}).collect(Collectors.toList());
+		List<String> errors = ex.getConstraintViolations().stream()
+				.map(error -> error.getInvalidValue() + ": " + error.getMessage())
+				.collect(Collectors.toList());
 		ExceptionBody body = new ExceptionBody(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST.name(), "Validation errors occurred", request.getRequestURI(), errors);
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
 	}

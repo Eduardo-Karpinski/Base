@@ -2,6 +2,7 @@ package br.com.base.utils;
 
 import java.util.Optional;
 
+import org.springframework.boot.web.server.Cookie.SameSite;
 import org.springframework.http.ResponseCookie;
 
 import jakarta.servlet.http.Cookie;
@@ -31,9 +32,9 @@ public class CookieUtils {
 	public static ResponseCookie createResponseCookie(String data) {
 		return ResponseCookie.from("jwt", data)
 				.httpOnly(true)
-				.secure(false) // true para produção HTTPS
+				.secure(true)
 				.path("/")
-				.sameSite("Strict")
+				.sameSite(SameSite.STRICT.toString())
 				.build();
 	}
 
