@@ -110,14 +110,34 @@ To enable it, configure your SMTP credentials via environment variables.
 
 ---
 
-## 🧊 Native Build Ready
+## 🛠️ Build Instructions
 
-This project is fully compatible with **GraalVM Native Image** and can be compiled into a standalone binary using tools like:
+This project is fully ready for both JAR packaging and native image compilation, with support for unit tests during the build process.
+🔹 Standard JAR Build
 
-- Spring AOT
-- `native-image` CLI
+You can build the project as a runnable .jar using Maven:
 
-> Native builds drastically reduce startup time and memory footprint, making them ideal for cloud-native and containerized environments.
+clean package
+
+This will:
+
+    Run your test suite
+
+    Package the project into target/base.jar
+
+🔹 Native Image Build (GraalVM)
+
+If you have GraalVM installed and configured, you can compile the project into a native executable:
+
+clean native:compile -Pnative
+
+This will:
+
+    Run your tests
+
+    Compile the application into a lightweight, fast-startup native binary (e.g., target/base or target/base.exe on Windows)
+
+    ✅ All native builds were tested and generated successfully using Eclipse IDE with the GraalVM plugin and the official Spring Native tooling.
 
 ---
 
