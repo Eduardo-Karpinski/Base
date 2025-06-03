@@ -53,9 +53,6 @@ cd Base
 Create a `.env` file or export the following system environment variables:
 
 ```env
-# App Info
-SPRING_APPLICATION_NAME=Base
-
 # Database
 DB_URL=jdbc:mysql://localhost:3306/base?createDatabaseIfNotExist=true
 DB_USER=root
