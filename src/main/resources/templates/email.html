@@ -1,17 +1,85 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Email</title>
-</head>
-<body>
-    <h2>Welcome, <span th:text="${name}"></span></h2>
-    <p>Your account has been successfully created in the Base System.</p>
-    <p><strong>Password:</strong> <span th:text="${password}"></span></p>
-    <p>We recommend changing your password after logging in.</p>
-    <br/>
-    <p>Best regards</p>
-    <p><strong>Base System Team</strong></p>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Welcome Email</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f6f8;
+        margin: 0;
+        padding: 0;
+      }
+
+      .email-container {
+        max-width: 600px;
+        margin: 40px auto;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+      }
+
+      .header {
+        background-color: #4caf50;
+        color: white;
+        padding: 20px;
+        text-align: center;
+      }
+
+      .content {
+        padding: 30px;
+      }
+
+      h2 {
+        color: #333333;
+      }
+
+      p {
+        color: #555555;
+        line-height: 1.6;
+      }
+
+      .footer {
+        padding: 20px;
+        text-align: center;
+        font-size: 14px;
+        background-color: #f0f0f0;
+        color: #777777;
+      }
+
+      .highlight {
+        font-weight: bold;
+        color: #4caf50;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="email-container">
+      <div class="header">
+        <h1>Welcome to Base System</h1>
+      </div>
+      <div class="content">
+        <h2>Hello, <span th:text="${name}">User</span> 👋</h2>
+        <p>
+          Your account has been successfully created in the
+          <span class="highlight">Base System</span>.
+        </p>
+        <p>
+          <strong>Password:</strong> <span th:text="${password}">••••••</span>
+        </p>
+        <p>
+          We strongly recommend changing your password after your first login.
+        </p>
+        <p>
+          Feel free to explore the platform and reach out if you need any help.
+        </p>
+      </div>
+      <div class="footer">
+        Best regards,<br />
+        <strong>Base System Team</strong>
+      </div>
+    </div>
+  </body>
 </html>
