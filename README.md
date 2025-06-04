@@ -10,6 +10,8 @@ This project includes the essential building blocks most applications need, alre
 
 - 🔐 **JWT-based Authentication via HttpOnly Cookie**
 - 🚦 **Rate Limiting**
+- 📬 **Email Support**
+- 🧠 **Caching System**
 - 🧰 **Layered Architecture**
 - 🧼 **Global Exception Handling**
 - 📬 **Thymeleaf Email Template Engine**
@@ -28,7 +30,7 @@ br.com.base
 ├── controller      # REST endpoints
 ├── domain          # Core domain models/entities
 ├── exception       # Global exception handling
-├── filter          # Custom request filters (JWT, logging, rate limiting)
+├── filter          # Custom request filters (JWT, logging, rate limiting, etc.)
 ├── mappers         # Entity to DTO converters
 ├── records         # DTOs (Request/Response models)
 ├── repositories    # Spring Data JPA interfaces
@@ -107,6 +109,21 @@ This ensures fair resource usage while protecting the system from abuse.
 The project includes an **asynchronous email service** using `JavaMailSender` and **Thymeleaf** for dynamic HTML templates.
 
 To enable it, configure your SMTP credentials via environment variables.
+
+---
+
+## 🧠 Caching System
+
+This project includes a caching layer using Caffeine, a high-performance Java caching library.
+It is configured to:
+
+    ✅ Improve performance by reducing unnecessary database queries
+
+    🧹 Auto-evict stale entries using TTL and max size limits
+
+    🔎 Support manual and declarative caching via @Cacheable or direct access
+
+You can easily adapt or replace it with other cache providers like Redis, depending on your production needs.
 
 ---
 

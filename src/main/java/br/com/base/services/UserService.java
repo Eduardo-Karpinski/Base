@@ -3,6 +3,8 @@ package br.com.base.services;
 import java.util.Map;
 import java.util.Optional;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PagedModel;
@@ -27,6 +29,7 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 
+	@CacheEvict(value = "users", allEntries = true)
 	public ResponseEntity<Object> save(UserRequest userRequest) {
 		if (userRepository.existsByEmail(userRequest.email())) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email already used");
@@ -52,6 +55,7 @@ public class UserService {
 		}
 	}
 
+	@CacheEvict(value = "users", allEntries = true)
 	public ResponseEntity<Object> delete(Long id) {
 		Optional<User> optional = userRepository.findById(id);
 
@@ -63,6 +67,7 @@ public class UserService {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 	}
 
+	@CacheEvict(value = "users", allEntries = true)
 	public ResponseEntity<Object> update(Long id, UserUpdateRequest userUpdateRequest) {
 		Optional<User> optional = userRepository.findById(id);
 
@@ -80,6 +85,7 @@ public class UserService {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
 	}
 
+	@Cacheable(value = "users")
 	public ResponseEntity<Object> get(Pageable pageable) {
 		Page<User> pageOfEntities = userRepository.findAll(pageable);
 		Page<UserResponse> pageOfRecords = pageOfEntities.map(UserMapper::toUserResponse);
