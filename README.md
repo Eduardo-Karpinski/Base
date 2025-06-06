@@ -130,6 +130,7 @@ You can easily adapt or replace it with other cache providers like Redis, depend
 ## 🛠️ Build Instructions
 
 This project is fully ready for both JAR packaging and native image compilation, with support for unit tests during the build process.
+
 🔹 Standard JAR Build
 
 You can build the project as a runnable .jar using Maven:
