@@ -23,7 +23,7 @@ public class RequestLoggingFilter extends OncePerRequestFilter {
 	    String method = request.getMethod();
 	    String uri = request.getRequestURI();
 	    String ip = request.getRemoteAddr();
-	    String username = null;
+	    String username;
 	    
 	    if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User user) {
 	    	username = user.getEmail();

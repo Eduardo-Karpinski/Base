@@ -14,7 +14,6 @@ import br.com.base.security.UserDetailsServiceImpl;
 import br.com.base.utils.CookieUtils;
 import br.com.base.utils.ErrorResponseWriter;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +28,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 	private final UserDetailsServiceImpl userDetailsService;
 
 	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws IOException {
 		try {
 			String token = CookieUtils.getCookieValue(request, "jwt");
 			boolean isAuthEndpoint = request.getRequestURI().equals("/api/v1/auth/login");
