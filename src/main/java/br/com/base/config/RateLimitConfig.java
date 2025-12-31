@@ -17,7 +17,7 @@ public class RateLimitConfig {
 	public CaffeineProxyManager<String> rateLimitProxyManager() {
 		Caffeine<Object, Object> maximumSize = Caffeine.newBuilder()
 				.maximumSize(100_000)
-				.removalListener((key, value, cause) -> log.info("[RateLimit] Entry removed from cache: {} (reason: {})", key, cause));
+				.removalListener((key, _, cause) -> log.info("[RateLimit] Entry removed from cache: {} (reason: {})", key, cause));
 		return new CaffeineProxyManager<>(maximumSize, Duration.ofMinutes(10));
 	}
 }

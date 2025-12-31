@@ -1,12 +1,24 @@
 [
 	{
-		"name": "com.github.benmanes.caffeine.cache.SSMSA",
-		"allDeclaredConstructors": true,
-		"allPublicConstructors": true
+		"name": "com.github.benmanes.caffeine.cache.SSLMSW",
+		"allPublicConstructors": true,
+		"allDeclaredConstructors": true
 	},
 	{
 		"name": "com.github.benmanes.caffeine.cache.SSLMSA",
-		"allDeclaredConstructors": true,
-		"allPublicConstructors": true
+		"allPublicConstructors": true,
+		"allDeclaredConstructors": true
+	},
+	{
+		"name": "br.com.base.records.UserResponse",
+		"allDeclaredFields": true,
+		"allDeclaredMethods": true,
+		"allDeclaredConstructors": true
+	},
+	{
+		"name": "br.com.base.exception.ExceptionBody",
+		"allDeclaredFields": true,
+		"allDeclaredMethods": true,
+		"allDeclaredConstructors": true
 	}
 ]

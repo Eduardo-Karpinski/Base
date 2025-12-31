@@ -20,7 +20,7 @@ public class CacheConfig {
 	@Bean
 	public Caffeine<Object, Object> caffeineConfig() {
 		return Caffeine.newBuilder().expireAfterWrite(10, TimeUnit.MINUTES).maximumSize(100).removalListener(
-				(key, value, cause) -> log.info("Cache eviction -> key: {}, cause: {}", key, cause));
+				(key, _, cause) -> log.info("Cache eviction -> key: {}, cause: {}", key, cause));
 	}
 
 	@Bean
